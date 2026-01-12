@@ -1,0 +1,194 @@
+/* HomeView Styles */
+
+.home-view {
+    padding: var(--spacing-xl);
+    max-width: 900px;
+}
+
+.view-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+}
+
+.view-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+
+.view-subtitle {
+    color: var(--color-text-tertiary);
+    font-size: 14px;
+    margin: 0;
+}
+
+.status-badges {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.status-badge .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-error);
+}
+
+.status-badge.connected .status-dot {
+    background: var(--color-success);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.action-cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.action-card:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-bg-tertiary);
+}
+
+.action-card.primary {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+}
+
+.action-card.primary:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+.action-card.primary .action-icon,
+.action-card.primary .action-content h3,
+.action-card.primary .action-content p,
+.action-card.primary .action-arrow {
+    color: white;
+}
+
+.action-card.primary svg {
+    stroke: white;
+}
+
+.action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    color: var(--color-brand);
+    flex-shrink: 0;
+}
+
+.action-icon.small {
+    width: 48px;
+    height: 48px;
+}
+
+.action-card.primary .action-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.action-content {
+    flex: 1;
+}
+
+.action-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--color-text-primary);
+}
+
+.action-content p {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+.action-arrow {
+    color: white;
+    flex-shrink: 0;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-md);
+    color: var(--color-text-secondary);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.status-item {
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.status-label {
+    display: block;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-bottom: 4px;
+}
+
+.status-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.status-value.connected {
+    color: var(--color-success);
+}
+
+.status-value.disconnected {
+    color: var(--color-text-tertiary);
+}

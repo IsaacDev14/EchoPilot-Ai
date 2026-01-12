@@ -1,23 +1,41 @@
 /**
- * EchoPilot - Real-Time AI Interview Assistant
- * Main Application Component
+ * EchoPilot - AI Interview Assistant
+ * Main Application with Dashboard Layout
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { InterviewProvider, useInterview } from './context/InterviewContext';
-import Header from './components/Header';
+import { ThemeProvider } from './context/ThemeContext';
+import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
+import HomeView from './components/HomeView';
+import CVUpload from './components/CVUpload';
 import InterviewSetup from './components/InterviewSetup';
 import InterviewSession from './components/InterviewSession';
-import CVUpload from './components/CVUpload';
 import './styles/index.css';
-import './styles/components.css';
 import './App.css';
 
-function AppContent() {
-  const { backendStatus, cvContext } = useInterview();
+function Dashboard() {
+  const { cvContext } = useInterview();
+  const [activeView, setActiveView] = useState('home');
   const [showSetup, setShowSetup] = useState(false);
   const [inSession, setInSession] = useState(false);
   const [sessionSettings, setSessionSettings] = useState(null);
+
+  const getViewInfo = () => {
+    switch (activeView) {
+      case 'home':
+        return { title: 'Home', subtitle: 'Welcome back to EchoPilot' };
+      case 'sessions':
+        return { title: 'Interview Sessions', subtitle: 'View past sessions and recordings' };
+      case 'resumes':
+        return { title: 'CVs / Resumes', subtitle: 'Manage your uploaded resumes' };
+      default:
+        return { title: 'Home', subtitle: '' };
+    }
+  };
+
+  const viewInfo = getViewInfo();
 
   const handleStartSession = (settings) => {
     setSessionSettings(settings);
@@ -30,7 +48,7 @@ function AppContent() {
     setSessionSettings(null);
   };
 
-  // If in active session, show session view
+  // If in active session, show full-screen session view
   if (inSession && sessionSettings) {
     return (
       <InterviewSession
@@ -40,99 +58,56 @@ function AppContent() {
     );
   }
 
-  return (
-    <div className="app">
-      <Header />
-
-      <main className="app-main">
-        <div className="landing-content">
-          {/* Hero Section */}
-          <section className="hero-section">
-            <div className="hero-badge">AI-Powered Interview Assistant</div>
-            <h1 className="hero-title">
-              Ace Your Next Interview with
-              <span className="text-gradient"> EchoPilot</span>
-            </h1>
-            <p className="hero-subtitle">
-              Real-time transcription and AI-powered answer suggestions
-              to help you shine in any interview.
-            </p>
-
-            <div className="hero-actions">
-              <button
-                className="btn btn-primary btn-lg"
-                onClick={() => setShowSetup(true)}
-                disabled={backendStatus !== 'connected'}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-                Start Free Session
-              </button>
-              <button className="btn btn-secondary btn-lg">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
-                </svg>
-                Watch Demo
+  const renderView = () => {
+    switch (activeView) {
+      case 'home':
+        return <HomeView onStartInterview={() => setShowSetup(true)} />;
+      case 'sessions':
+        return (
+          <div className="view-content">
+            <header className="view-header">
+              <h1>Interview Sessions</h1>
+              <p className="view-subtitle">View past sessions and recordings</p>
+            </header>
+            <div className="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              <h3>No sessions yet</h3>
+              <p>Start your first interview to see it here</p>
+              <button className="btn btn-primary" onClick={() => setShowSetup(true)}>
+                Start Interview
               </button>
             </div>
-
-            {backendStatus !== 'connected' && (
-              <div className="hero-notice">
-                <span className="notice-icon">⚠️</span>
-                Connecting to server...
-              </div>
-            )}
-          </section>
-
-          {/* Features Grid */}
-          <section className="features-section">
-            <h2 className="section-title">How It Works</h2>
-            <div className="features-grid">
-              <div className="feature-card">
-                <div className="feature-icon">📄</div>
-                <h3>Upload Resume</h3>
-                <p>Add your CV so the AI can personalize answers based on your experience.</p>
-              </div>
-              <div className="feature-card">
-                <div className="feature-icon">🎤</div>
-                <h3>Capture Audio</h3>
-                <p>Select your browser tab or mic to capture the interview audio in real-time.</p>
-              </div>
-              <div className="feature-card">
-                <div className="feature-icon">📝</div>
-                <h3>Live Transcription</h3>
-                <p>See what's being said instantly with our fast speech-to-text engine.</p>
-              </div>
-              <div className="feature-card">
-                <div className="feature-icon">🤖</div>
-                <h3>AI Suggestions</h3>
-                <p>Get context-aware answer suggestions when questions are detected.</p>
-              </div>
-            </div>
-          </section>
-
-          {/* Quick Resume Upload */}
-          <section className="upload-section">
-            <div className="upload-card">
+          </div>
+        );
+      case 'resumes':
+        return (
+          <div className="view-content">
+            <header className="view-header">
+              <h1>CVs / Resumes</h1>
+              <p className="view-subtitle">Manage your uploaded resumes</p>
+            </header>
+            <div className="resume-section">
               <CVUpload />
             </div>
-          </section>
+          </div>
+        );
+      default:
+        return <HomeView onStartInterview={() => setShowSetup(true)} />;
+    }
+  };
+
+  return (
+    <div className="app-layout">
+      <Sidebar activeView={activeView} onViewChange={setActiveView} />
+      <main className="main-content">
+        <TopBar title={viewInfo.title} subtitle={viewInfo.subtitle} />
+        <div className="main-view">
+          {renderView()}
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>
-          <span className="text-gradient">EchoPilot</span> — Your AI Interview Co-Pilot
-        </p>
-        <p className="footer-hint">
-          Upload your resume, start the interview, and get real-time answer suggestions
-        </p>
-      </footer>
-
-      {/* Setup Wizard Modal */}
       <InterviewSetup
         isOpen={showSetup}
         onClose={() => setShowSetup(false)}
@@ -144,9 +119,11 @@ function AppContent() {
 
 function App() {
   return (
-    <InterviewProvider>
-      <AppContent />
-    </InterviewProvider>
+    <ThemeProvider>
+      <InterviewProvider>
+        <Dashboard />
+      </InterviewProvider>
+    </ThemeProvider>
   );
 }
 

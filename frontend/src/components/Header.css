@@ -28,10 +28,7 @@
 .header-title h1 {
     font-size: 1.25rem;
     font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-accent-primary);
     margin: 0;
     line-height: 1.2;
 }
@@ -42,10 +39,30 @@
     letter-spacing: 0.05em;
 }
 
-.header-status {
+.header-actions {
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
 }
 
 .session-indicator {

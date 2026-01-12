@@ -22,14 +22,15 @@
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: var(--color-accent-primary);
     color: white;
-    box-shadow: var(--shadow-md), var(--shadow-glow);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: var(--shadow-lg), 0 0 30px var(--color-accent-glow);
+    background: var(--color-accent-secondary);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-secondary {
@@ -253,7 +254,7 @@
 
 .audio-bar {
     width: 4px;
-    background: var(--gradient-primary);
+    background: var(--color-accent-primary);
     border-radius: var(--radius-full);
     animation: audioWave 1s ease-in-out infinite;
 }
