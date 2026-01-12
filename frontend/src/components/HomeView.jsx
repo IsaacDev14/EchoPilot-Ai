@@ -8,33 +8,15 @@ import { useInterview } from '../context/InterviewContext';
 import './HomeView.css';
 
 function HomeView({ onStartInterview }) {
-    const { backendStatus, wsStatus, cvContext } = useInterview();
+    const { cvContext } = useInterview();
 
     return (
         <div className="home-view">
-            {/* Header */}
-            <header className="view-header">
-                <div>
-                    <h1>Home</h1>
-                    <p className="view-subtitle">Welcome back to EchoPilot</p>
-                </div>
-                <div className="status-badges">
-                    <div className={`status-badge ${backendStatus === 'connected' ? 'connected' : 'disconnected'}`}>
-                        <span className="status-dot"></span>
-                        API
-                    </div>
-                    <div className={`status-badge ${wsStatus === 'connected' ? 'connected' : 'disconnected'}`}>
-                        <span className="status-dot"></span>
-                        WS
-                    </div>
-                </div>
-            </header>
-
             {/* Quick Actions */}
             <section className="quick-actions">
                 <div className="action-card primary" onClick={onStartInterview}>
                     <div className="action-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
                             <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
                             <line x1="12" y1="19" x2="12" y2="23" />
@@ -54,7 +36,7 @@ function HomeView({ onStartInterview }) {
                 <div className="action-cards-row">
                     <div className="action-card">
                         <div className="action-icon small">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                                 <polyline points="14 2 14 8 20 8" />
                                 <line x1="12" y1="18" x2="12" y2="12" />
@@ -63,13 +45,13 @@ function HomeView({ onStartInterview }) {
                         </div>
                         <div className="action-content">
                             <h3>Upload Resume</h3>
-                            <p>Add your CV for personalized AI responses</p>
+                            <p>Add your CV for personalized responses</p>
                         </div>
                     </div>
 
                     <div className="action-card">
                         <div className="action-icon small">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <polyline points="12 6 12 12 16 14" />
                             </svg>
@@ -82,30 +64,46 @@ function HomeView({ onStartInterview }) {
                 </div>
             </section>
 
-            {/* Status Section */}
-            <section className="dashboard-section">
-                <h2>System Status</h2>
-                <div className="status-grid">
-                    <div className="status-item">
-                        <span className="status-label">Backend API</span>
-                        <span className={`status-value ${backendStatus}`}>
-                            {backendStatus === 'connected' ? 'Connected' : 'Disconnected'}
-                        </span>
+            {/* Stats Section */}
+            <section className="stats-section">
+                <h2>Overview</h2>
+                <div className="stats-grid">
+                    <div className="stat-card">
+                        <div className="stat-value">0</div>
+                        <div className="stat-label">Total Sessions</div>
                     </div>
-                    <div className="status-item">
-                        <span className="status-label">WebSocket</span>
-                        <span className={`status-value ${wsStatus === 'connected' ? 'connected' : 'disconnected'}`}>
-                            {wsStatus === 'connected' ? 'Connected' : 'Ready'}
-                        </span>
+                    <div className="stat-card">
+                        <div className="stat-value">0h</div>
+                        <div className="stat-label">Practice Time</div>
                     </div>
-                    <div className="status-item">
-                        <span className="status-label">Resume</span>
-                        <span className={`status-value ${cvContext.hasCV ? 'connected' : ''}`}>
-                            {cvContext.hasCV ? cvContext.filename : 'Not uploaded'}
-                        </span>
+                    <div className="stat-card">
+                        <div className="stat-value">{cvContext.hasCV ? '1' : '0'}</div>
+                        <div className="stat-label">Resumes</div>
                     </div>
                 </div>
             </section>
+
+            {/* Resume Preview */}
+            {cvContext.hasCV && (
+                <section className="resume-preview">
+                    <h2>Active Resume</h2>
+                    <div className="resume-card">
+                        <div className="resume-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
+                        </div>
+                        <div className="resume-info">
+                            <span className="resume-name">{cvContext.filename}</span>
+                            <span className="resume-status">Ready for interviews</span>
+                        </div>
+                        <button className="btn btn-ghost btn-sm">Change</button>
+                    </div>
+                </section>
+            )}
         </div>
     );
 }

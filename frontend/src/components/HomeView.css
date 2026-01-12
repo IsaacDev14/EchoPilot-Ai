@@ -1,55 +1,8 @@
 /* HomeView Styles */
 
 .home-view {
-    padding: var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-xl);
     max-width: 900px;
-}
-
-.view-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-xl);
-}
-
-.view-header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0 0 4px;
-}
-
-.view-subtitle {
-    color: var(--color-text-tertiary);
-    font-size: 14px;
-    margin: 0;
-}
-
-.status-badges {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.status-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: var(--color-bg-tertiary);
-    border-radius: var(--radius-full);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-}
-
-.status-badge .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-error);
-}
-
-.status-badge.connected .status-dot {
-    background: var(--color-success);
 }
 
 /* Quick Actions */
@@ -75,12 +28,14 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .action-card:hover {
-    border-color: var(--color-border-hover);
+    border-color: var(--color-brand);
     background: var(--color-bg-tertiary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .action-card.primary {
@@ -91,6 +46,8 @@
 .action-card.primary:hover {
     background: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
 }
 
 .action-card.primary .action-icon,
@@ -108,8 +65,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     background: var(--color-bg-tertiary);
     border-radius: var(--radius-md);
     color: var(--color-brand);
@@ -117,22 +74,23 @@
 }
 
 .action-icon.small {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
 }
 
 .action-card.primary .action-icon {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .action-content {
     flex: 1;
+    min-width: 0;
 }
 
 .action-content h3 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    margin: 0 0 4px;
+    margin: 0 0 2px;
     color: var(--color-text-primary);
 }
 
@@ -140,55 +98,98 @@
     font-size: 13px;
     color: var(--color-text-tertiary);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .action-arrow {
     color: white;
     flex-shrink: 0;
+    opacity: 0.8;
 }
 
-/* Dashboard Section */
-.dashboard-section {
+/* Stats Section */
+.stats-section {
     margin-bottom: var(--spacing-xl);
 }
 
-.dashboard-section h2 {
-    font-size: 16px;
+.stats-section h2,
+.resume-preview h2 {
+    font-size: 14px;
     font-weight: 600;
-    margin: 0 0 var(--spacing-md);
     color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.status-grid {
+.stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-md);
 }
 
-.status-item {
-    padding: var(--spacing-md);
+.stat-card {
+    padding: var(--spacing-lg);
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
+    text-align: center;
 }
 
-.status-label {
-    display: block;
-    font-size: 12px;
-    color: var(--color-text-tertiary);
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-text-primary);
     margin-bottom: 4px;
 }
 
-.status-value {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
+.stat-label {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
 }
 
-.status-value.connected {
+/* Resume Preview */
+.resume-preview {
+    margin-bottom: var(--spacing-xl);
+}
+
+.resume-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.resume-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: var(--radius-md);
     color: var(--color-success);
 }
 
-.status-value.disconnected {
-    color: var(--color-text-tertiary);
+.resume-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.resume-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.resume-status {
+    font-size: 12px;
+    color: var(--color-success);
 }
