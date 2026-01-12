@@ -1,89 +1,170 @@
 /* AudioCapture Component Styles */
 
-.audio-capture-panel {
-    /* Uses panel styles from components.css */
+.audio-capture {
+    display: flex;
+    flex-direction: column;
 }
 
+.audio-capture .panel-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.audio-capture .panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Source Selector */
+.source-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.source-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+}
+
+.source-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.source-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    text-align: left;
+}
+
+.source-option:hover:not(:disabled) {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-primary);
+}
+
+.source-option.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-primary);
+}
+
+.source-option:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.source-option svg {
+    flex-shrink: 0;
+}
+
+.source-option span {
+    flex: 1;
+}
+
+/* Tab Info */
+.tab-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+}
+
+.tab-label {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.tab-name {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Audio Controls */
 .audio-controls {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-lg) 0;
+    gap: var(--spacing-sm);
 }
 
-.audio-status {
+.audio-controls .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.audio-controls .btn-danger {
+    background: linear-gradient(135deg, var(--color-error) 0%, #dc2626 100%);
+}
+
+.recording-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    animation: recordPulse 1.5s ease-in-out infinite;
+    margin-right: var(--spacing-xs);
+}
+
+/* Audio Visualizer */
+.audio-visualizer {
+    height: 8px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.audio-level {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+    border-radius: var(--radius-full);
+    transition: width 0.1s ease;
+}
+
+/* Recording Status */
+.recording-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recording-indicator {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-xs) var(--spacing-md);
+    background: rgba(239, 68, 68, 0.15);
     border-radius: var(--radius-full);
     font-size: 0.875rem;
+    color: var(--color-error);
     font-weight: 500;
 }
 
-.audio-status.status-ready {
-    background: var(--color-success-bg);
-    color: var(--color-success);
-}
-
-.audio-status.status-warning {
-    background: var(--color-warning-bg);
-    color: var(--color-warning);
-}
-
-.audio-status.status-recording {
-    background: var(--color-error-bg);
-    color: var(--color-error);
-}
-
-.audio-visualizer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    height: 50px;
-    padding: var(--spacing-md);
-}
-
-.audio-bar {
-    width: 6px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-full);
-    transition: height 0.1s ease;
-}
-
-.audio-toggle-btn {
-    min-width: 200px;
-}
-
-.audio-instructions {
-    padding: var(--spacing-md);
-    background: var(--color-bg-tertiary);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--color-accent-primary);
-}
-
-.audio-instructions p {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    margin: 0;
-    line-height: 1.6;
-}
-
-.audio-instructions strong {
-    color: var(--color-accent-secondary);
-}
-
-/* Recording indicator animation */
-.recording-indicator {
-    display: flex;
-    align-items: center;
-}
-
-.recording-dot {
-    width: 10px;
-    height: 10px;
+.pulse-dot {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--color-error);
     animation: recordPulse 1.5s ease-in-out infinite;
@@ -93,14 +174,40 @@
 
     0%,
     100% {
-        opacity: 1;
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        opacity: 0.5;
+        transform: scale(0.8);
     }
 
     50% {
-        opacity: 0.8;
-        transform: scale(1.1);
-        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+        opacity: 1;
+        transform: scale(1);
     }
+}
+
+/* Error Message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-error);
+    font-size: 0.875rem;
+}
+
+/* Tip */
+.audio-tip {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-tertiary);
+    border-left: 3px solid var(--color-accent-primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.audio-tip strong {
+    color: var(--color-accent-secondary);
 }

@@ -1,6 +1,6 @@
 /**
  * useAudioCapture Hook
- * Handles audio capture from microphone using MediaRecorder API.
+ * Handles audio capture from microphone AND browser tab/screen using MediaRecorder API.
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
@@ -14,22 +14,29 @@ export const AudioCaptureStatus = {
     ERROR: 'error',
 };
 
+export const AudioSourceType = {
+    MICROPHONE: 'microphone',
+    TAB: 'tab',
+    BOTH: 'both', // Mix microphone + tab audio
+};
+
 export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
     const [status, setStatus] = useState(AudioCaptureStatus.IDLE);
     const [error, setError] = useState(null);
     const [audioLevel, setAudioLevel] = useState(0);
+    const [audioSource, setAudioSource] = useState(AudioSourceType.MICROPHONE);
+    const [tabName, setTabName] = useState(null);
 
-    const streamRef = useRef(null);
+    const micStreamRef = useRef(null);
+    const tabStreamRef = useRef(null);
+    const combinedStreamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const audioContextRef = useRef(null);
     const analyserRef = useRef(null);
     const animationFrameRef = useRef(null);
 
     // Request microphone access
-    const requestAccess = useCallback(async () => {
-        setStatus(AudioCaptureStatus.REQUESTING);
-        setError(null);
-
+    const requestMicrophoneAccess = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
@@ -38,29 +45,104 @@ export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
                     sampleRate: 16000,
                 },
             });
+            micStreamRef.current = stream;
+            return stream;
+        } catch (err) {
+            console.error('Failed to access microphone:', err);
+            throw err;
+        }
+    }, []);
 
-            streamRef.current = stream;
+    // Request tab/screen audio access
+    const requestTabAccess = useCallback(async () => {
+        try {
+            // Use getDisplayMedia to capture tab/window audio
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: { displaySurface: 'browser' }, // Prefer browser tab
+                audio: true, // Capture audio from the tab
+                selfBrowserSurface: 'include', // Allow capturing current tab
+                systemAudio: 'include', // Include system audio if available
+            });
 
-            // Set up audio context for visualization
-            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            // Check if audio track exists
+            const audioTracks = stream.getAudioTracks();
+            if (audioTracks.length === 0) {
+                // Stop video tracks since we don't need them
+                stream.getVideoTracks().forEach(track => track.stop());
+                throw new Error('No audio track found. Make sure to check "Share audio" when selecting the tab.');
+            }
+
+            // Stop video tracks - we only need audio
+            stream.getVideoTracks().forEach(track => track.stop());
+
+            // Get tab name from track label
+            const audioTrack = audioTracks[0];
+            setTabName(audioTrack.label || 'Selected Tab');
+
+            tabStreamRef.current = stream;
+            return stream;
+        } catch (err) {
+            console.error('Failed to access tab audio:', err);
+            throw err;
+        }
+    }, []);
+
+    // Request audio access based on selected source
+    const requestAccess = useCallback(async (sourceType = AudioSourceType.MICROPHONE) => {
+        setStatus(AudioCaptureStatus.REQUESTING);
+        setError(null);
+        setAudioSource(sourceType);
+
+        try {
+            let activeStream = null;
+
+            if (sourceType === AudioSourceType.MICROPHONE) {
+                activeStream = await requestMicrophoneAccess();
+            } else if (sourceType === AudioSourceType.TAB) {
+                activeStream = await requestTabAccess();
+            } else if (sourceType === AudioSourceType.BOTH) {
+                // Get both streams
+                const micStream = await requestMicrophoneAccess();
+                const tabStream = await requestTabAccess();
+
+                // Combine streams using AudioContext
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const destination = audioContext.createMediaStreamDestination();
+
+                const micSource = audioContext.createMediaStreamSource(micStream);
+                const tabSource = audioContext.createMediaStreamSource(tabStream);
+
+                micSource.connect(destination);
+                tabSource.connect(destination);
+
+                activeStream = destination.stream;
+                audioContextRef.current = audioContext;
+            }
+
+            combinedStreamRef.current = activeStream;
+
+            // Set up audio visualization
+            if (!audioContextRef.current) {
+                audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            }
             analyserRef.current = audioContextRef.current.createAnalyser();
-            const source = audioContextRef.current.createMediaStreamSource(stream);
+            const source = audioContextRef.current.createMediaStreamSource(activeStream);
             source.connect(analyserRef.current);
             analyserRef.current.fftSize = 256;
 
             setStatus(AudioCaptureStatus.READY);
             return true;
         } catch (err) {
-            console.error('Failed to access microphone:', err);
-            setError(err.message || 'Failed to access microphone');
+            console.error('Failed to access audio:', err);
+            setError(err.message || 'Failed to access audio source');
             setStatus(AudioCaptureStatus.ERROR);
             return false;
         }
-    }, []);
+    }, [requestMicrophoneAccess, requestTabAccess]);
 
     // Start recording
     const startRecording = useCallback(() => {
-        if (!streamRef.current) {
+        if (!combinedStreamRef.current) {
             console.error('No stream available');
             return false;
         }
@@ -82,7 +164,7 @@ export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
                 options.mimeType = '';
             }
 
-            const mediaRecorder = new MediaRecorder(streamRef.current, options);
+            const mediaRecorder = new MediaRecorder(combinedStreamRef.current, options);
             mediaRecorderRef.current = mediaRecorder;
 
             mediaRecorder.ondataavailable = async (event) => {
@@ -184,9 +266,19 @@ export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
     const cleanup = useCallback(() => {
         stopRecording();
 
-        if (streamRef.current) {
-            streamRef.current.getTracks().forEach(track => track.stop());
-            streamRef.current = null;
+        if (micStreamRef.current) {
+            micStreamRef.current.getTracks().forEach(track => track.stop());
+            micStreamRef.current = null;
+        }
+
+        if (tabStreamRef.current) {
+            tabStreamRef.current.getTracks().forEach(track => track.stop());
+            tabStreamRef.current = null;
+        }
+
+        if (combinedStreamRef.current) {
+            combinedStreamRef.current.getTracks().forEach(track => track.stop());
+            combinedStreamRef.current = null;
         }
 
         if (audioContextRef.current) {
@@ -194,6 +286,7 @@ export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
             audioContextRef.current = null;
         }
 
+        setTabName(null);
         setStatus(AudioCaptureStatus.IDLE);
     }, [stopRecording]);
 
@@ -208,6 +301,8 @@ export function useAudioCapture({ onAudioChunk, chunkIntervalMs = 500 }) {
         status,
         error,
         audioLevel,
+        audioSource,
+        tabName,
         isRecording: status === AudioCaptureStatus.RECORDING,
         isReady: status === AudioCaptureStatus.READY,
         requestAccess,
