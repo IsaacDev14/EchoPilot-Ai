@@ -33,6 +33,7 @@ function InterviewSession({ settings, onExit }) {
     const [error, setError] = useState(null);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [autoScroll, setAutoScroll] = useState(true);
+    const [lastProcessedLength, setLastProcessedLength] = useState(0);
 
     const transcriptRef = useRef(null);
     const startTimeRef = useRef(null);
@@ -83,6 +84,25 @@ function InterviewSession({ settings, onExit }) {
             audioCapture.startRecording();
         }
     }, [sessionActive, audioCapture.isReady, audioCapture.isRecording]);
+
+    // Auto-detect questions and trigger AI response
+    useEffect(() => {
+        if (!settings.autoGenerate || !transcription || aiResponse.isGenerating) return;
+
+        // Check for new content since last check
+        const newContent = transcription.slice(lastProcessedLength);
+        if (newContent.length < 10) return; // Wait for enough content
+
+        // Simple question detection: look for ? or common question words
+        const hasQuestion = newContent.includes('?') ||
+            /\b(what|why|how|when|where|who|which|tell me|describe|explain|can you)\b/i.test(newContent);
+
+        if (hasQuestion) {
+            // Trigger AI response
+            requestAnswer(transcription);
+            setLastProcessedLength(transcription.length);
+        }
+    }, [transcription, settings.autoGenerate, aiResponse.isGenerating, lastProcessedLength, requestAnswer]);
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
@@ -225,7 +245,19 @@ function InterviewSession({ settings, onExit }) {
                 {/* Left: Transcript Panel */}
                 <div className="session-panel">
                     <div className="panel-header">
-                        <h3>Live Transcript</h3>
+                        <div className="panel-title-row">
+                            <h3>Live Transcript</h3>
+                            {audioCapture.tabName && (
+                                <span className="tab-name">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                                        <line x1="8" y1="21" x2="16" y2="21" />
+                                        <line x1="12" y1="17" x2="12" y2="21" />
+                                    </svg>
+                                    {audioCapture.tabName}
+                                </span>
+                            )}
+                        </div>
                         <div className="panel-controls">
                             <label className="auto-scroll-toggle">
                                 <input
