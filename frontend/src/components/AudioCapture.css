@@ -1,0 +1,106 @@
+/* AudioCapture Component Styles */
+
+.audio-capture-panel {
+    /* Uses panel styles from components.css */
+}
+
+.audio-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+}
+
+.audio-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.audio-status.status-ready {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.audio-status.status-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.audio-status.status-recording {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.audio-visualizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 50px;
+    padding: var(--spacing-md);
+}
+
+.audio-bar {
+    width: 6px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    transition: height 0.1s ease;
+}
+
+.audio-toggle-btn {
+    min-width: 200px;
+}
+
+.audio-instructions {
+    padding: var(--spacing-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--color-accent-primary);
+}
+
+.audio-instructions p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.audio-instructions strong {
+    color: var(--color-accent-secondary);
+}
+
+/* Recording indicator animation */
+.recording-indicator {
+    display: flex;
+    align-items: center;
+}
+
+.recording-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-error);
+    animation: recordPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes recordPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    }
+}

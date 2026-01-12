@@ -1,0 +1,159 @@
+/* App Layout Styles */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-primary);
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  max-width: 1800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar */
+.app-sidebar {
+  width: 350px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Main Content */
+.app-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  height: 100%;
+}
+
+.content-grid>* {
+  min-height: 400px;
+}
+
+/* Footer */
+.app-footer {
+  padding: var(--spacing-md) var(--spacing-xl);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+}
+
+.app-footer p:first-child {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.footer-hint {
+  font-size: 0.75rem !important;
+  margin-top: var(--spacing-xs) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app-main {
+    flex-direction: column;
+  }
+
+  .app-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .app-sidebar>* {
+    flex: 1;
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: var(--spacing-md);
+  }
+
+  .app-sidebar {
+    flex-direction: column;
+  }
+
+  .app-sidebar>* {
+    min-width: 100%;
+  }
+
+  .content-grid {
+    gap: var(--spacing-md);
+  }
+}
+
+/* Animations */
+.app-main>*,
+.content-grid>* {
+  animation: slideUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.app-sidebar>*:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.app-sidebar>*:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.content-grid>*:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.content-grid>*:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Glow effects */
+.app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}

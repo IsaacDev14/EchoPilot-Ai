@@ -1,0 +1,126 @@
+/* CVUpload Component Styles */
+
+.cv-upload-panel {
+    min-height: 200px;
+}
+
+.dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.dropzone:hover,
+.dropzone.active {
+    border-color: var(--color-accent-primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.dropzone.uploading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.dropzone-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.dropzone-text {
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.dropzone-text strong {
+    color: var(--color-text-primary);
+}
+
+.dropzone-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}
+
+.upload-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+}
+
+.upload-loading span {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.cv-error {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    margin-top: var(--spacing-md);
+}
+
+/* Loaded State */
+.cv-loaded {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.cv-file-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.cv-file-icon {
+    color: var(--color-accent-primary);
+}
+
+.cv-file-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.cv-filename {
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.cv-summary {
+    padding: var(--spacing-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--color-accent-primary);
+}
+
+.cv-summary h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.cv-summary p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
