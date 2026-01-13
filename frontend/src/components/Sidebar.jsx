@@ -50,10 +50,14 @@ function Sidebar({ activeView, onViewChange }) {
             <div className="sidebar-header">
                 <div className="logo">
                     <div className="logo-icon">
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                            <circle cx="14" cy="14" r="12" fill="#3b82f6" />
-                            <circle cx="14" cy="14" r="6" fill="#0a0a0a" />
-                            <circle cx="14" cy="14" r="3" fill="#3b82f6" />
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="15" fill="#3b82f6" />
+                            <circle cx="16" cy="16" r="10" fill="var(--color-bg-secondary, #111)" />
+                            <rect x="10" y="11" width="2" height="10" rx="1" fill="#3b82f6" />
+                            <rect x="13" y="8" width="2" height="16" rx="1" fill="#3b82f6" />
+                            <rect x="16" y="6" width="2" height="20" rx="1" fill="#3b82f6" />
+                            <rect x="19" y="8" width="2" height="16" rx="1" fill="#3b82f6" />
+                            <rect x="22" y="11" width="2" height="10" rx="1" fill="#3b82f6" />
                         </svg>
                     </div>
                     <span className="logo-text">EchoPilot</span>
